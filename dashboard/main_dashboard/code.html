@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<script>
+    // Authentication guard
+    if (sessionStorage.getItem('authenticated') !== 'true') {
+        window.location.href = '../login_screen/code.html';
+    }
+</script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-mono { font-family: 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace; }
+        .label-tech { font-family: 'Space Grotesk', sans-serif; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#dce4e5",
+                        "primary-container": "#00e5ff",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#f3bf26",
+                        "on-surface-variant": "#bac9cc",
+                        "surface": "#0d1516",
+                        "surface-container-high": "#242b2d",
+                        "outline": "#849396",
+                        "on-primary-fixed": "#001f24",
+                        "on-secondary-fixed": "#131c2b",
+                        "secondary-container": "#40495b",
+                        "outline-variant": "#3b494c",
+                        "tertiary": "#ffeac0",
+                        "surface-dim": "#0d1516",
+                        "on-primary-container": "#00626e",
+                        "on-primary": "#00363d",
+                        "surface-container-highest": "#2e3638",
+                        "on-secondary": "#283141",
+                        "surface-container-lowest": "#080f11",
+                        "on-secondary-container": "#afb8cd",
+                        "inverse-on-surface": "#2a3233",
+                        "secondary-fixed-dim": "#bec7dc",
+                        "on-error": "#690005",
+                        "background": "#0d1516",
+                        "tertiary-container": "#fec931",
+                        "on-primary-fixed-variant": "#004f58",
+                        "secondary": "#bec7dc",
+                        "secondary-fixed": "#dae2f9",
+                        "on-tertiary-container": "#6f5500",
+                        "primary-fixed": "#9cf0ff",
+                        "primary-fixed-dim": "#00daf3",
+                        "surface-bright": "#333a3c",
+                        "surface-container": "#192122",
+                        "tertiary-fixed": "#ffdf96",
+                        "surface-tint": "#00daf3",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#594400",
+                        "error-container": "#93000a",
+                        "inverse-primary": "#006875",
+                        "primary": "#c3f5ff",
+                        "surface-container-low": "#151d1e",
+                        "on-surface": "#dce4e5",
+                        "on-background": "#dce4e5",
+                        "on-tertiary": "#3e2e00",
+                        "on-secondary-fixed-variant": "#3e4758",
+                        "on-tertiary-fixed": "#251a00",
+                        "surface-variant": "#2e3638"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin": "24px",
+                        "xs": "4px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "md": "16px",
+                        "sm": "8px",
+                        "lg": "24px",
+                        "xl": "32px"
+                    },
+                    "fontFamily": {
+                        "body-base": ["Inter"],
+                        "label-tech": ["Space Grotesk"],
+                        "body-sm": ["Inter"],
+                        "h1": ["Inter"],
+                        "h2": ["Inter"],
+                        "code": ["monospace"]
+                    },
+                    "fontSize": {
+                        "body-base": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "label-tech": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-sm": ["14px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "h1": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "h2": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "code": ["13px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background selection:bg-primary-container/30">
+<!-- Top Navigation Bar -->
+<header class="bg-[#0D1117] flex justify-between items-center w-full px-6 h-16 fixed top-0 z-50 border-b border-[#161B22]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#00E5FF] text-2xl" data-icon="shield_with_heart" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span>
+<h1 class="font-mono text-lg font-black tracking-tighter text-[#00E5FF]">SYSTEM_SURVEILLANCE_v4.2</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#00E5FF] animate-pulse"></span>
+<span class="font-inter text-xs tracking-widest uppercase font-semibold text-[#00E5FF]">LIVE_FEED</span>
+</div>
+<img alt="Operator" class="w-8 h-8 rounded-full border border-primary-container/20 cursor-pointer active:scale-95 transition-all" data-alt="A professional security analyst avatar in a cinematic low-key lighting setup. The operator is wearing a high-tech tactical headset and a dark specialized uniform. The background is a blurred server room with cool neon blue and deep black tones, maintaining a vigilant and authoritative cybersecurity atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvJTThA2-Rbtv8VvfdxLS56v3Z00LXzI2dlDHYypHPiK5GUme1q3B5iElDN1xvVOsvaQ9AT9ErsD8YfPXsyXODyw_PmHfpD5BJfW9TiE0qDAfSm9yQAhdFa658nxc3sA-_wW5lAzQWnH8BptYnV_Fkv9XKa2z3vwD8KScdVZiJcLPkIA_JA5TIYi9YQAX4udNy2kV5meNg-aTEgowoG7Ohd_wtMyaD0xSpkAmvp0-uTc-_KYUjeQ6kFBSFTyt2gT0pvyWTJyk9BF8"/>
+</div>
+</header>
+<!-- Navigation Drawer (Desktop) -->
+<aside class="hidden md:flex fixed left-0 top-0 h-full w-64 bg-[#05070A] border-r border-[#161B22] flex-col pt-16 z-40">
+<div class="p-6 border-b border-[#161B22] mb-2">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-container" data-icon="person">person</span>
+</div>
+<div>
+<div id="operator-display-name" class="text-[#00E5FF] font-mono font-bold text-sm">OPERATOR_01</div>
+<div class="text-slate-500 text-xs font-mono uppercase tracking-widest">Root_Access</div>
+</div>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto px-2">
+<!-- Active Item -->
+<a class="text-[#00E5FF] bg-[#161B22]/50 border-r-2 border-[#00E5FF] py-3 px-4 flex items-center gap-3 transition-colors mb-1" href="../main_dashboard/code.html">
+<span class="material-symbols-outlined" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-inter text-sm tracking-tight">Dashboard</span>
+</a>
+<a class="text-slate-500 py-3 px-4 flex items-center gap-3 hover:bg-[#0D1117] hover:text-[#00E5FF] transition-colors mb-1 active:bg-[#161B22]" href="../network_map/code.html">
+<span class="material-symbols-outlined" data-icon="lan">lan</span>
+<span class="font-inter text-sm tracking-tight">Network Map</span>
+</a>
+<a class="text-slate-500 py-3 px-4 flex items-center gap-3 hover:bg-[#0D1117] hover:text-[#00E5FF] transition-colors mb-1 active:bg-[#161B22]" href="../vulnerabilities/code.html">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="font-inter text-sm tracking-tight">Vulnerabilities</span>
+</a>
+<a class="text-slate-500 py-3 px-4 flex items-center gap-3 hover:bg-[#0D1117] hover:text-[#00E5FF] transition-colors mb-1 active:bg-[#161B22]" href="../exploitation_results/code.html">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span class="font-inter text-sm tracking-tight">Exploitation</span>
+</a>
+<a class="text-slate-500 py-3 px-4 flex items-center gap-3 hover:bg-[#0D1117] hover:text-[#00E5FF] transition-colors mb-1 active:bg-[#161B22]" href="../reports/code.html">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-inter text-sm tracking-tight">Reports</span>
+</a>
+<a class="text-slate-500 py-3 px-4 flex items-center gap-3 hover:bg-[#0D1117] hover:text-[#00E5FF] transition-colors mb-1 active:bg-[#161B22]" href="../settings/code.html">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-inter text-sm tracking-tight">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-[#161B22]">
+<div class="text-[10px] text-slate-600 font-mono uppercase">System Status: Online</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="pt-20 pb-24 md:pb-8 px-6 md:pl-72 max-w-7xl mx-auto">
+<!-- Header Actions -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+<div>
+<h2 class="font-h1 text-h1 text-on-surface">System Overview</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Last automated scan: 14 mins ago</p>
+</div>
+<div class="flex gap-3">
+<button class="bg-primary-container text-on-primary-container px-4 py-2 rounded font-label-tech text-label-tech font-bold flex items-center gap-2 hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="rocket_launch">rocket_launch</span>
+                    INITIATE_SCAN
+                </button>
+<button class="border border-outline-variant text-on-surface px-4 py-2 rounded font-label-tech text-label-tech hover:bg-surface-container-high transition-all">
+                    EXPORT_LOGS
+                </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Risk Score Widget -->
+<div class="md:col-span-4 bg-surface-container-low border border-outline-variant p-6 rounded-xl flex flex-col items-center justify-center relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4">
+<span class="material-symbols-outlined text-outline/30" data-icon="info">info</span>
+</div>
+<h3 class="font-label-tech text-label-tech text-outline uppercase mb-6 self-start">Aggregate Risk Score</h3>
+<div class="relative w-48 h-48 flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container-highest" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary-container drop-shadow-[0_0_8px_rgba(0,229,255,0.4)]" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-dasharray="552.92" stroke-dashoffset="138" stroke-width="12"></circle>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="text-5xl font-black text-on-surface">75</span>
+<span class="text-[10px] text-primary-container font-mono tracking-widest uppercase">Elevated</span>
+</div>
+</div>
+<div class="mt-6 w-full space-y-2">
+<div class="flex justify-between text-xs font-mono">
+<span class="text-slate-500 uppercase">System Integrity</span>
+<span class="text-primary-container">Optimal</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full w-[85%]"></div>
+</div>
+</div>
+</div>
+<!-- Severity Distribution -->
+<div class="md:col-span-8 bg-surface-container-low border border-outline-variant p-6 rounded-xl">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-label-tech text-label-tech text-outline uppercase">Vulnerability severity</h3>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="text-[10px] font-mono text-slate-400">Critical</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>
+<span class="text-[10px] font-mono text-slate-400">High</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<!-- Stat Card -->
+<div class="bg-surface-container-high p-4 rounded-lg border-l-2 border-error">
+<div class="text-[10px] font-mono text-slate-500 uppercase mb-1">Critical</div>
+<div class="text-2xl font-black text-on-surface" id="count-critical">--</div>
+<div class="text-[10px] text-error flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-xs" data-icon="trending_up">trending_up</span>
+                            Active threats
+                        </div>
+</div>
+<div class="bg-surface-container-high p-4 rounded-lg border-l-2 border-tertiary-fixed-dim">
+<div class="text-[10px] font-mono text-slate-500 uppercase mb-1">High</div>
+<div class="text-2xl font-black text-on-surface" id="count-high">--</div>
+<div class="text-[10px] text-tertiary-fixed-dim flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-xs" data-icon="trending_up">trending_up</span>
+                            Action required
+                        </div>
+</div>
+<div class="bg-surface-container-high p-4 rounded-lg border-l-2 border-primary-container">
+<div class="text-[10px] font-mono text-slate-500 uppercase mb-1">Medium</div>
+<div class="text-2xl font-black text-on-surface" id="count-medium">--</div>
+<div class="text-[10px] text-primary-container flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-xs" data-icon="remove">remove</span>
+                            Stable
+                        </div>
+</div>
+<div class="bg-surface-container-high p-4 rounded-lg border-l-2 border-outline">
+<div class="text-[10px] font-mono text-slate-500 uppercase mb-1">Low</div>
+<div class="text-2xl font-black text-on-surface" id="count-low">--</div>
+<div class="text-[10px] text-outline flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-xs" data-icon="remove">remove</span>
+                            Muted alerts
+                        </div>
+</div>
+</div>
+<!-- Simple Line Chart Visualization (SVG) -->
+<div class="mt-8 h-40 w-full relative">
+<svg class="w-full h-full overflow-visible" viewbox="0 0 800 150">
+<path class="drop-shadow-[0_0_8px_rgba(0,229,255,0.4)]" d="M0 130 Q 100 120, 200 80 T 400 60 T 600 90 T 800 20" fill="none" stroke="#00E5FF" stroke-width="3"></path>
+<path d="M0 130 Q 100 120, 200 80 T 400 60 T 600 90 T 800 20 L 800 150 L 0 150 Z" fill="url(#gradient-blue)" opacity="0.1"></path>
+<defs>
+<lineargradient id="gradient-blue" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#00E5FF"></stop>
+<stop offset="100%" stop-color="transparent"></stop>
+</lineargradient>
+</defs>
+<!-- Grid Lines -->
+<line stroke="#161B22" stroke-width="1" x1="0" x2="800" y1="140" y2="140"></line>
+<line stroke="#161B22" stroke-dasharray="4" stroke-width="1" x1="0" x2="800" y1="100" y2="100"></line>
+<line stroke="#161B22" stroke-dasharray="4" stroke-width="1" x1="0" x2="800" y1="60" y2="60"></line>
+</svg>
+<div class="absolute bottom-0 left-0 w-full flex justify-between px-2 pt-2 border-t border-[#161B22]">
+<span class="text-[9px] font-mono text-slate-600">00:00</span>
+<span class="text-[9px] font-mono text-slate-600">06:00</span>
+<span class="text-[9px] font-mono text-slate-600">12:00</span>
+<span class="text-[9px] font-mono text-slate-600">18:00</span>
+<span class="text-[9px] font-mono text-slate-600">23:59</span>
+</div>
+</div>
+</div>
+<!-- Key Infrastructure Metrics -->
+<div class="md:col-span-12 grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="bg-surface-container-low border border-outline-variant p-5 rounded-xl flex items-center gap-4">
+<div class="w-12 h-12 rounded bg-primary-container/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-container" data-icon="devices">devices</span>
+</div>
+<div>
+<div class="text-2xl font-black text-on-surface" id="count-devices">--</div>
+<div class="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Connected AD Nodes</div>
+</div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant p-5 rounded-xl flex items-center gap-4">
+<div class="w-12 h-12 rounded bg-tertiary-container/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary-container" data-icon="bolt">bolt</span>
+</div>
+<div>
+<div class="text-2xl font-black text-on-surface" id="count-active">--</div>
+<div class="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Active Exploits</div>
+</div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant p-5 rounded-xl flex items-center gap-4">
+<div class="w-12 h-12 rounded bg-error/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-error" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div>
+<div class="text-2xl font-black text-on-surface" id="count-unmitigated">--</div>
+<div class="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Unmitigated Risks</div>
+</div>
+</div>
+</div>
+<!-- Terminal Output / Logs View -->
+<div class="md:col-span-12 bg-[#05070A] border border-outline-variant rounded-xl overflow-hidden">
+<div class="bg-[#161B22] px-4 py-2 flex justify-between items-center border-b border-outline-variant">
+<div class="flex items-center gap-2">
+<div class="flex gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-error/40"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary-fixed-dim/40"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container/40"></span>
+</div>
+<span class="font-mono text-[10px] text-slate-400 ml-4">Terminal Session: ad_audit_probe_v4</span>
+</div>
+<span class="material-symbols-outlined text-slate-500 text-sm" data-icon="more_horiz">more_horiz</span>
+</div>
+<div id="terminal-feed" class="p-6 font-mono text-[12px] leading-relaxed text-primary-container/80 space-y-1 h-[220px] overflow-y-auto">
+<p><span class="text-slate-600">[19:20:01]</span> <span class="text-on-surface">Initializing Active Directory Domain Audit...</span></p>
+<p><span class="text-slate-600">[19:20:05]</span> <span class="text-on-surface">Target Domain Controller identified: DC-AD-01 (192.168.1.10)</span></p>
+<p><span class="text-slate-600">[19:20:10]</span> <span class="text-on-surface">Target Client workstation identified: CL-WIN-10 (192.168.1.50)</span></p>
+<p><span class="text-slate-600">[19:20:15]</span> <span class="text-tertiary-container">AUDIT: Checking SMB signing policy on 192.168.1.0/24...</span></p>
+<p><span class="text-slate-600">[19:20:22]</span> <span class="text-error">EXPLOIT_TRIGGERED: NTLM Relay relaying credentials from CL-WIN-10 to DC-AD-01!</span></p>
+<p class="animate-pulse">_</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile Only) -->
+<footer class="md:hidden fixed bottom-0 left-0 w-full bg-[#0D1117] flex justify-around items-center h-16 z-50 border-t border-[#161B22] px-2">
+<a class="flex flex-col items-center justify-center text-[#00E5FF] font-bold gap-1" href="../main_dashboard/code.html">
+<span class="material-symbols-outlined" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="text-[10px] uppercase tracking-tighter">Dash</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 gap-1" href="../network_map/code.html">
+<span class="material-symbols-outlined" data-icon="lan">lan</span>
+<span class="text-[10px] uppercase tracking-tighter">Net</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 gap-1" href="../vulnerabilities/code.html">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="text-[10px] uppercase tracking-tighter">Vuln</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 gap-1" href="../exploitation_results/code.html">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span class="text-[10px] uppercase tracking-tighter">Shell</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 gap-1" href="../reports/code.html">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="text-[10px] uppercase tracking-tighter">Report</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 gap-1" href="../settings/code.html">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-[10px] uppercase tracking-tighter">Set</span>
+</a>
+</footer>
+
+<script>
+    // Fallback data in case exploits.json fetch fails (CORS error in file:// protocol)
+    const fallbackExploits = [
+      { "id": "CVE-2020-1472", "name": "Zerologon Netlogon Privilege Escalation", "type": "RCE", "severity": "Critical", "target": "DC-AD-01 (Domain Controller)", "ip": "192.168.1.10", "description": "Cryptographic bypass in netlogon protocol.", "status": "Exploited" },
+      { "id": "CVE-2021-34527", "name": "PrintNightmare Spooler Service RCE", "type": "RCE", "severity": "Critical", "target": "DC-AD-01 (Domain Controller)", "ip": "192.168.1.10", "description": "Spooler service arbitrary DLL execution.", "status": "Exploited" },
+      { "id": "CVE-2021-26855", "name": "ProxyLogon SSRF & Remote Code Execution", "type": "RCE", "severity": "Critical", "target": "DC-AD-01 (Exchange Server)", "ip": "192.168.1.10", "description": "Exchange pre-auth SSRF.", "status": "Vulnerable" },
+      { "id": "CVE-2019-0708", "name": "BlueKeep Remote Desktop Services RCE", "type": "RCE", "severity": "Critical", "target": "CL-WIN-10 (Client Workstation)", "ip": "192.168.1.50", "description": "RDP channel execution.", "status": "Exploited" },
+      { "id": "GPO-01", "name": "SMB Signing Not Enforced Policy", "type": "Policy", "severity": "High", "target": "CL-WIN-10 & DC-AD-01", "ip": "192.168.1.0/24", "description": "Digital signing not enforced, relay vulnerability.", "status": "Exploited" },
+      { "id": "GPO-02", "name": "SYSVOL Group Policy Password Exposure", "type": "Policy", "severity": "High", "target": "DC-AD-01 (SYSVOL)", "ip": "192.168.1.10", "description": "Decryption of passwords inside SYSVOL xml.", "status": "Vulnerable" },
+      { "id": "MED-01", "name": "LLMNR/NBT-NS Poisoning Active", "type": "Normal", "severity": "Medium", "target": "CL-WIN-10 (Client Workstation)", "ip": "192.168.1.50", "description": "LLMNR name resolution poisoning active.", "status": "Exploited" }
+    ];
+
+    document.addEventListener("DOMContentLoaded", () => {
+        // Set operator name
+        const operatorName = sessionStorage.getItem('operator') || 'MAHDI';
+        const operatorEl = document.getElementById('operator-display-name');
+        if (operatorEl) {
+            operatorEl.textContent = operatorName;
+        }
+
+        // Fetch exploits database
+        fetch('../exploits.json')
+            .then(res => res.json())
+            .then(data => updateDashboardMetrics(data))
+            .catch(err => {
+                console.warn("Using fallback exploits database due to CORS/fetch limitations:", err);
+                updateDashboardMetrics(fallbackExploits);
+            });
+
+        function updateDashboardMetrics(exploits) {
+            let critical = 0;
+            let high = 0;
+            let medium = 0;
+            let low = 0;
+            let active = 0;
+            let unmitigated = 0;
+
+            exploits.forEach(exp => {
+                // Count severity
+                const sev = exp.severity.toLowerCase();
+                if (sev === 'critical') critical++;
+                else if (sev === 'high') high++;
+                else if (sev === 'medium') medium++;
+                else if (sev === 'low') low++;
+
+                // Count active
+                if (exp.status === 'Exploited') {
+                    active++;
+                } else if (exp.status === 'Vulnerable') {
+                    unmitigated++;
+                }
+            });
+
+            // Set content in dashboard
+            document.getElementById('count-critical').textContent = critical;
+            document.getElementById('count-high').textContent = high;
+            document.getElementById('count-medium').textContent = medium;
+            document.getElementById('count-low').textContent = low;
+
+            // Devices is hardcoded to 2 since we have exactly 1 AD controller and 1 Client workstation connected to it.
+            document.getElementById('count-devices').textContent = "2";
+            document.getElementById('count-active').textContent = active;
+            document.getElementById('count-unmitigated').textContent = unmitigated;
+        }
+
+        // Live terminal logs simulation
+        const terminalFeed = document.getElementById('terminal-feed');
+        const logs = [
+            { text: "DC-AD-01 LDAP query received from CL-WIN-10.", color: "text-on-surface" },
+            { text: "WARNING: Anonymous LDAP bind attempt detected on DC-AD-01.", color: "text-tertiary-container" },
+            { text: "EXPLOIT_MATCH: CVE-2021-34527 (PrintNightmare) DLL injection initiated on DC-AD-01.", color: "text-error" },
+            { text: "SESSION_ESTABLISHED: SYSTEM shell spawned on DC-AD-01 via PrintNightmare.", color: "text-primary-container" },
+            { text: "Kerberos ticket TGT requested for Administrator account from CL-WIN-10.", color: "text-on-surface" },
+            { text: "Golden Ticket detected: Kerberos service ticket signature mismatch.", color: "text-error" },
+            { text: "SYSVOL backup folder crawled. Decrypting Group Policy Preferences password...", color: "text-primary-container" },
+            { text: "SUCCESS: SYSVOL password decrypted! Extracted 'AdminPass412!'.", color: "text-primary-container" }
+        ];
+
+        let logIndex = 0;
+        setInterval(() => {
+            if (logIndex < logs.length) {
+                const log = logs[logIndex];
+                const now = new Date();
+                const timeStr = now.toTimeString().split(' ')[0];
+                
+                const p = document.createElement('p');
+                p.innerHTML = `<span class="text-slate-600">[${timeStr}]</span> <span class="${log.color}">${log.text}</span>`;
+                
+                // insert before the blink cursor
+                const cursor = terminalFeed.querySelector('.animate-pulse');
+                if (cursor) {
+                    terminalFeed.insertBefore(p, cursor);
+                } else {
+                    terminalFeed.appendChild(p);
+                }
+                terminalFeed.scrollTop = terminalFeed.scrollHeight;
+                logIndex++;
+            }
+        }, 5000);
+    });
+</script>
+</body></html>

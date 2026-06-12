@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<script>
+    // Authentication guard
+    if (sessionStorage.getItem('authenticated') !== 'true') {
+        window.location.href = '../login_screen/code.html';
+    }
+</script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#dce4e5",
+                        "primary-container": "#00e5ff",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#f3bf26",
+                        "on-surface-variant": "#bac9cc",
+                        "surface": "#0d1516",
+                        "surface-container-high": "#242b2d",
+                        "outline": "#849396",
+                        "on-primary-fixed": "#001f24",
+                        "on-secondary-fixed": "#131c2b",
+                        "secondary-container": "#40495b",
+                        "outline-variant": "#3b494c",
+                        "tertiary": "#ffeac0",
+                        "surface-dim": "#0d1516",
+                        "on-primary-container": "#00626e",
+                        "on-primary": "#00363d",
+                        "surface-container-highest": "#2e3638",
+                        "on-secondary": "#283141",
+                        "surface-container-lowest": "#080f11",
+                        "on-secondary-container": "#afb8cd",
+                        "inverse-on-surface": "#2a3233",
+                        "secondary-fixed-dim": "#bec7dc",
+                        "on-error": "#690005",
+                        "background": "#0d1516",
+                        "tertiary-container": "#fec931",
+                        "on-primary-fixed-variant": "#004f58",
+                        "secondary": "#bec7dc",
+                        "secondary-fixed": "#dae2f9",
+                        "on-tertiary-container": "#6f5500",
+                        "primary-fixed": "#9cf0ff",
+                        "primary-fixed-dim": "#00daf3",
+                        "surface-bright": "#333a3c",
+                        "surface-container": "#192122",
+                        "tertiary-fixed": "#ffdf96",
+                        "surface-tint": "#00daf3",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#594400",
+                        "error-container": "#93000a",
+                        "inverse-primary": "#006875",
+                        "primary": "#c3f5ff",
+                        "surface-container-low": "#151d1e",
+                        "on-surface": "#dce4e5",
+                        "on-background": "#dce4e5",
+                        "on-tertiary": "#3e2e00",
+                        "on-secondary-fixed-variant": "#3e4758",
+                        "on-tertiary-fixed": "#251a00",
+                        "surface-variant": "#2e3638"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin": "24px",
+                        "xs": "4px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "md": "16px",
+                        "sm": "8px",
+                        "lg": "24px",
+                        "xl": "32px"
+                    },
+                    "fontFamily": {
+                        "body-base": ["Inter"],
+                        "label-tech": ["Space Grotesk"],
+                        "body-sm": ["Inter"],
+                        "h1": ["Inter"],
+                        "h2": ["Inter"],
+                        "code": ["monospace"]
+                    },
+                    "fontSize": {
+                        "body-base": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "label-tech": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-sm": ["14px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "h1": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "h2": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "code": ["13px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-base antialiased">
+<!-- TopAppBar -->
+<header class="bg-[#0D1117] text-[#00E5FF] font-inter text-xs tracking-widest uppercase font-semibold fixed top-0 left-0 right-0 z-50 flex justify-between items-center w-full px-6 h-16 border-b border-[#161B22]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#00E5FF] text-2xl" data-icon="shield_with_heart" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span>
+<span class="text-lg font-black tracking-tighter text-[#00E5FF] font-mono">SYSTEM_SURVEILLANCE_v4.2</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-2 mr-2">
+<span class="w-2 h-2 rounded-full bg-[#00E5FF] animate-pulse"></span>
+<span class="font-inter text-xs tracking-widest uppercase font-semibold text-[#00E5FF]">THREAT_AUDIT</span>
+</div>
+<img alt="Operator" class="w-8 h-8 rounded-full border border-primary-container/20 cursor-pointer active:scale-95 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvJTThA2-Rbtv8VvfdxLS56v3Z00LXzI2dlDHYypHPiK5GUme1q3B5iElDN1xvVOsvaQ9AT9ErsD8YfPXsyXODyw_PmHfpD5BJfW9TiE0qDAfSm9yQAhdFa658nxc3sA-_wW5lAzQWnH8BptYnV_Fkv9XKa2z3vwD8KScdVZiJcLPkIA_JA5TIYi9YQAX4udNy2kV5meNg-aTEgowoG7Ohd_wtMyaD0xSpkAmvp0-uTc-_KYUjeQ6kFBSFTyt2gT0pvyWTJyk9BF8"/>
+</div>
+</header>
+<!-- Navigation Shell -->
+<nav class="hidden md:flex fixed left-0 top-0 h-full flex flex-col pt-16 bg-[#05070A] text-[#00E5FF] font-inter text-sm tracking-tight h-full w-64 border-r border-[#161B22] shadow-none z-40">
+<div class="px-6 py-8 border-b border-[#161B22]">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-[#161B22] flex items-center justify-center">
+<span class="material-symbols-outlined text-[#00E5FF]" data-icon="person">person</span>
+</div>
+<div>
+<div id="operator-display-name" class="text-[#00E5FF] font-mono font-bold">OPERATOR_01</div>
+<div class="text-slate-500 text-[10px] uppercase">Privilege: Root</div>
+</div>
+</div>
+</div>
+<div class="flex-1 py-4">
+<a class="text-slate-500 py-3 px-4 flex items-center gap-3 hover:bg-[#0D1117] hover:text-[#00E5FF] transition-colors cursor-pointer" href="../main_dashboard/code.html">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="text-slate-500 py-3 px-4 flex items-center gap-3 hover:bg-[#0D1117] hover:text-[#00E5FF] transition-colors cursor-pointer" href="../network_map/code.html">
+<span class="material-symbols-outlined">lan</span>
+<span>Network Map</span>
+</a>
+<a class="text-[#00E5FF] bg-[#161B22]/50 border-r-2 border-[#00E5FF] py-3 px-4 flex items-center gap-3 cursor-pointer" href="../vulnerabilities/code.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">security</span>
+<span>Vulnerabilities</span>
+</a>
+<a class="text-slate-500 py-3 px-4 flex items-center gap-3 hover:bg-[#0D1117] hover:text-[#00E5FF] transition-colors cursor-pointer" href="../exploitation_results/code.html">
+<span class="material-symbols-outlined">terminal</span>
+<span>Exploitation</span>
+</a>
+<a class="text-slate-500 py-3 px-4 flex items-center gap-3 hover:bg-[#0D1117] hover:text-[#00E5FF] transition-colors cursor-pointer" href="../reports/code.html">
+<span class="material-symbols-outlined">description</span>
+<span>Reports</span>
+</a>
+<a class="text-slate-500 py-3 px-4 flex items-center gap-3 hover:bg-[#0D1117] hover:text-[#00E5FF] transition-colors cursor-pointer" href="../settings/code.html">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 pt-20 pb-24 px-4 md:px-margin min-h-screen bg-background">
+<!-- Header & Stats Section -->
+<div class="mb-lg">
+<h1 class="font-h1 text-h1 text-on-background mb-sm">Vulnerabilities</h1>
+<p class="text-on-surface-variant font-body-sm max-w-2xl">Active Directory Domain Threat database. Scan results showing RCE threats, misconfigured GPOs, and credentials exposed inside shares.</p>
+</div>
+<!-- Metric Bento Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-gutter mb-lg">
+<div class="bg-surface-container border border-outline-variant p-md rounded-lg flex flex-col gap-1">
+<span class="font-label-tech text-label-tech text-error uppercase">Critical</span>
+<div class="flex items-baseline gap-2">
+<span id="metric-critical" class="text-h2 font-h2">--</span>
+<span class="text-xs text-error">RCE Active</span>
+</div>
+</div>
+<div class="bg-surface-container border border-outline-variant p-md rounded-lg flex flex-col gap-1">
+<span class="font-label-tech text-label-tech text-tertiary-fixed-dim uppercase">High Risk</span>
+<div class="flex items-baseline gap-2">
+<span id="metric-high" class="text-h2 font-h2">--</span>
+<span class="text-xs text-on-surface-variant">Policy issues</span>
+</div>
+</div>
+<div class="bg-surface-container border border-outline-variant p-md rounded-lg flex flex-col gap-1">
+<span class="font-label-tech text-label-tech text-primary-container uppercase">Exploited</span>
+<div class="flex items-baseline gap-2">
+<span id="metric-exploited" class="text-h2 font-h2">--</span>
+<span class="text-xs text-primary-container">Active Shells</span>
+</div>
+</div>
+<div class="bg-surface-container border border-outline-variant p-md rounded-lg flex flex-col gap-1">
+<span class="font-label-tech text-label-tech text-on-surface-variant uppercase">Scan Coverage</span>
+<div class="flex items-baseline gap-2">
+<span class="text-h2 font-h2">100%</span>
+<span class="text-xs text-on-surface-variant">2 Hosts</span>
+</div>
+</div>
+</div>
+<!-- Filter Controls -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-md mb-gutter flex flex-col md:flex-row gap-4 items-end md:items-center">
+<div class="w-full md:w-auto flex-1">
+<label class="font-label-tech text-on-surface-variant mb-xs block">Search CVE or Device</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm" data-icon="search">search</span>
+<input id="vuln-search" class="w-full bg-surface-container-lowest border border-outline-variant rounded-md pl-10 py-2 text-body-sm focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all" placeholder="CVE-2021-... or DC-AD-01" type="text"/>
+</div>
+</div>
+<div class="w-full md:w-48">
+<label class="font-label-tech text-on-surface-variant mb-xs block">Severity</label>
+<select id="vuln-severity" class="w-full bg-surface-container-lowest border border-outline-variant rounded-md px-3 py-2 text-body-sm focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none appearance-none">
+<option>All Severities</option>
+<option>Critical</option>
+<option>High</option>
+<option>Medium</option>
+</select>
+</div>
+<div class="w-full md:w-48">
+<label class="font-label-tech text-on-surface-variant mb-xs block">Status</label>
+<select id="vuln-status" class="w-full bg-surface-container-lowest border border-outline-variant rounded-md px-3 py-2 text-body-sm focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none appearance-none">
+<option>Any Status</option>
+<option>Exploited</option>
+<option>Not Exploited</option>
+</select>
+</div>
+<button id="vuln-apply-filters" class="w-full md:w-auto h-[40px] bg-primary-container text-on-primary-container px-lg rounded-md font-label-tech uppercase flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span>
+                Apply
+            </button>
+</div>
+<!-- Vulnerabilities Table Card -->
+<div class="bg-surface-container border border-outline-variant rounded-xl overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high border-b border-outline-variant">
+<th class="px-md py-4 font-label-tech text-on-surface-variant uppercase">CVE ID</th>
+<th class="px-md py-4 font-label-tech text-on-surface-variant uppercase">Severity</th>
+<th class="px-md py-4 font-label-tech text-on-surface-variant uppercase">Target Node</th>
+<th class="px-md py-4 font-label-tech text-on-surface-variant uppercase">Exploit Avail.</th>
+<th class="px-md py-4 font-label-tech text-on-surface-variant uppercase">Status</th>
+<th class="px-md py-4 font-label-tech text-on-surface-variant uppercase text-right">Action</th>
+</tr>
+</thead>
+<tbody id="vuln-table-body" class="divide-y divide-outline-variant/30">
+<!-- Dynamic rows injected here by JavaScript -->
+</tbody>
+</table>
+</div>
+<!-- Pagination-like Footer -->
+<div class="px-md py-4 bg-surface-container-high flex justify-between items-center border-t border-outline-variant">
+<span id="vuln-showing-text" class="text-[10px] font-label-tech text-outline uppercase">Showing 0 of 0 vulnerabilities</span>
+<div class="flex gap-2">
+<button class="p-1 hover:text-primary-container transition-colors disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="p-1 hover:text-primary-container transition-colors" onclick="alert('Demo Version: All threats displayed on a single page.')">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#0D1117] border-t border-[#161B22] flex justify-around items-center px-4 z-50">
+<a class="flex flex-col items-center gap-1 text-slate-500 hover:text-[#00E5FF] transition-all cursor-pointer" href="../main_dashboard/code.html">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-label-tech">DASHBOARD</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 hover:text-[#00E5FF] transition-all cursor-pointer" href="../network_map/code.html">
+<span class="material-symbols-outlined">lan</span>
+<span class="text-[10px] font-label-tech">NETWORK</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-[#00E5FF] transition-all cursor-pointer" href="../vulnerabilities/code.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">security</span>
+<span class="text-[10px] font-label-tech">VULNS</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 hover:text-[#00E5FF] transition-all cursor-pointer" href="../exploitation_results/code.html">
+<span class="material-symbols-outlined">terminal</span>
+<span class="text-[10px] font-label-tech">EXPLOIT</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 hover:text-[#00E5FF] transition-all cursor-pointer" href="../reports/code.html">
+<span class="material-symbols-outlined">description</span>
+<span class="text-[10px] font-label-tech">REPORTS</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 hover:text-[#00E5FF] transition-all cursor-pointer" href="../settings/code.html">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-label-tech">SETTINGS</span>
+</a>
+</nav>
+
+<!-- Floating Action Button Contextual (Start New Scan) -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-primary-container text-on-primary-container rounded-full shadow-lg shadow-primary-container/20 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform z-50 md:bottom-10 md:right-10" onclick="alert('Initiating credentials audit on active targets... Connection Secured.')">
+<span class="material-symbols-outlined text-3xl" data-icon="add_moderator" style="font-variation-settings: 'FILL' 1;">add_moderator</span>
+</button>
+
+<script>
+    // Fallback database in case fetch fails due to CORS on file:// protocol
+    const fallbackExploits = [
+      { "id": "CVE-2020-1472", "name": "Zerologon Netlogon Privilege Escalation", "type": "RCE", "severity": "Critical", "target": "DC-AD-01 (Domain Controller)", "ip": "192.168.1.10", "description": "Allows complete domain controller takeover using zero netlogon tokens.", "status": "Exploited", "discovered_at": "12m ago", "port": 445, "remediation": "Apply KB4565351 patch and enforce secure Netlogon channel connections." },
+      { "id": "CVE-2021-34527", "name": "PrintNightmare Spooler Service RCE", "type": "RCE", "severity": "Critical", "target": "DC-AD-01 (Domain Controller)", "ip": "192.168.1.10", "description": "Remote code execution via printer driver DLL injection.", "status": "Exploited", "discovered_at": "28m ago", "port": 445, "remediation": "Disable Print Spooler on DC where printing is not required." },
+      { "id": "CVE-2021-26855", "name": "ProxyLogon SSRF & Remote Code Execution", "type": "RCE", "severity": "Critical", "target": "DC-AD-01 (Exchange Server)", "ip": "192.168.1.10", "description": "Exchange pre-auth SSRF.", "status": "Vulnerable", "discovered_at": "1h ago", "port": 443, "remediation": "Apply Exchange server security updates KB5000871." },
+      { "id": "CVE-2019-0708", "name": "BlueKeep Remote Desktop Services RCE", "type": "RCE", "severity": "Critical", "target": "CL-WIN-10 (Client Workstation)", "ip": "192.168.1.50", "description": "Remote code execution via remote desktop services channel corruption.", "status": "Exploited", "discovered_at": "4h ago", "port": 3389, "remediation": "Enforce Network Level Authentication (NLA) and apply KB4499175." },
+      { "id": "GPO-01", "name": "SMB Signing Not Enforced Policy", "type": "Policy", "severity": "High", "target": "CL-WIN-10 & DC-AD-01", "ip": "192.168.1.0/24", "description": "NTLM Relay authentication enabled due to signing policy configuration.", "status": "Exploited", "discovered_at": "3h ago", "port": 445, "remediation": "Configure Active Directory Group Policy to enforce SMB signing (always)." },
+      { "id": "GPO-02", "name": "SYSVOL Group Policy Password Exposure", "type": "Policy", "severity": "High", "target": "DC-AD-01 (SYSVOL)", "ip": "192.168.1.10", "description": "Decryption of passwords stored inside SYSVOL shares.", "status": "Vulnerable", "discovered_at": "5h ago", "port": 445, "remediation": "Apply KB2962486 and scan SYSVOL for passwords xml files to purge." },
+      { "id": "MED-01", "name": "LLMNR/NBT-NS Poisoning Active", "type": "Normal", "severity": "Medium", "target": "CL-WIN-10 (Client Workstation)", "ip": "192.168.1.50", "description": "LLMNR broadcasting active, susceptible to spoofing attacks.", "status": "Exploited", "discovered_at": "8h ago", "port": 5355, "remediation": "Disable LLMNR via Group Policy and disable NetBIOS over TCP/IP." }
+    ];
+
+    let exploitsDatabase = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+        // Set operator name
+        const operatorName = sessionStorage.getItem('operator') || 'MAHDI';
+        const operatorEl = document.getElementById('operator-display-name');
+        if (operatorEl) {
+            operatorEl.textContent = operatorName;
+        }
+
+        // Fetch database
+        fetch('../exploits.json')
+            .then(res => res.json())
+            .then(data => {
+                exploitsDatabase = data;
+                initVulnerabilities();
+            })
+            .catch(err => {
+                console.warn("Using fallback database due to fetch/CORS error:", err);
+                exploitsDatabase = fallbackExploits;
+                initVulnerabilities();
+            });
+
+        function initVulnerabilities() {
+            updateMetrics();
+            renderTable();
+
+            // Set up search and filter listeners
+            document.getElementById('vuln-search').addEventListener('input', renderTable);
+            document.getElementById('vuln-severity').addEventListener('change', renderTable);
+            document.getElementById('vuln-status').addEventListener('change', renderTable);
+            document.getElementById('vuln-apply-filters').addEventListener('click', renderTable);
+        }
+
+        function updateMetrics() {
+            let critical = 0;
+            let high = 0;
+            let exploited = 0;
+
+            exploitsDatabase.forEach(exp => {
+                if (exp.severity.toLowerCase() === 'critical') critical++;
+                if (exp.severity.toLowerCase() === 'high') high++;
+                if (exp.status === 'Exploited') exploited++;
+            });
+
+            document.getElementById('metric-critical').textContent = critical;
+            document.getElementById('metric-high').textContent = high;
+            document.getElementById('metric-exploited').textContent = exploited;
+        }
+
+        function renderTable() {
+            const searchQuery = document.getElementById('vuln-search').value.toLowerCase().trim();
+            const severityFilter = document.getElementById('vuln-severity').value;
+            const statusFilter = document.getElementById('vuln-status').value;
+            const tbody = document.getElementById('vuln-table-body');
+
+            tbody.innerHTML = "";
+
+            const filtered = exploitsDatabase.filter(exp => {
+                // Search query matching ID, name, description, or target
+                const matchesSearch = !searchQuery || 
+                    exp.id.toLowerCase().includes(searchQuery) ||
+                    exp.name.toLowerCase().includes(searchQuery) ||
+                    exp.target.toLowerCase().includes(searchQuery) ||
+                    exp.description.toLowerCase().includes(searchQuery);
+
+                // Severity matching
+                const matchesSeverity = severityFilter === 'All Severities' || 
+                    exp.severity === severityFilter;
+
+                // Status matching
+                let matchesStatus = true;
+                if (statusFilter === 'Exploited') {
+                    matchesStatus = exp.status === 'Exploited';
+                } else if (statusFilter === 'Not Exploited') {
+                    matchesStatus = exp.status === 'Vulnerable' || exp.status === 'Mitigated';
+                }
+
+                return matchesSearch && matchesSeverity && matchesStatus;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-md py-8 text-center text-slate-500 font-mono text-xs uppercase">
+                            No vulnerabilities matched current search/filter parameters
+                        </td>
+                    </tr>
+                `;
+                document.getElementById('vuln-showing-text').textContent = "Showing 0 of " + exploitsDatabase.length + " vulnerabilities";
+                return;
+            }
+
+            filtered.forEach(exp => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-surface-variant/50 transition-colors border-b border-outline-variant/20";
+                
+                // Severity Badge styling
+                let severityBadge = "";
+                if (exp.severity.toLowerCase() === 'critical') {
+                    severityBadge = `
+                        <span class="inline-flex items-center gap-1 bg-error-container/20 border border-error-container/50 text-error px-2 py-0.5 rounded text-[10px] font-bold uppercase">
+                            <span class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></span>
+                            Critical
+                        </span>
+                    `;
+                } else if (exp.severity.toLowerCase() === 'high') {
+                    severityBadge = `
+                        <span class="inline-flex items-center gap-1 bg-orange-500/10 border border-orange-500/30 text-orange-400 px-2 py-0.5 rounded text-[10px] font-bold uppercase">
+                            <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+                            High
+                        </span>
+                    `;
+                } else {
+                    severityBadge = `
+                        <span class="inline-flex items-center gap-1 bg-surface-container-highest border border-outline-variant text-on-surface px-2 py-0.5 rounded text-[10px] font-bold uppercase">
+                            <span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                            Medium
+                        </span>
+                    `;
+                }
+
+                // Status Badge styling
+                const statusBadge = exp.status === 'Exploited' 
+                    ? `<span class="bg-primary-container/10 text-primary-container border border-primary-container/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase">Exploited</span>`
+                    : `<span class="text-outline border border-outline-variant px-2 py-0.5 rounded text-[10px] font-bold uppercase">Vulnerable</span>`;
+
+                tr.innerHTML = `
+                    <td class="px-md py-5 align-top">
+                        <div class="font-mono text-primary-container font-bold">${exp.id}</div>
+                        <div class="text-[10px] text-outline font-label-tech mt-1">Discovered ${exp.discovered_at}</div>
+                    </td>
+                    <td class="px-md py-5 align-top">
+                        ${severityBadge}
+                    </td>
+                    <td class="px-md py-5 align-top">
+                        <div class="text-body-sm font-semibold">${exp.target.split(" ")[0]}</div>
+                        <div class="text-[10px] text-on-surface-variant">${exp.ip}</div>
+                    </td>
+                    <td class="px-md py-5 align-top">
+                        <span class="text-primary-container flex items-center gap-1 font-label-tech">
+                            <span class="material-symbols-outlined text-sm">${exp.status === 'Exploited' ? 'check_circle' : 'cancel'}</span>
+                            ${exp.status === 'Exploited' ? 'YES' : 'NO'}
+                        </span>
+                    </td>
+                    <td class="px-md py-5 align-top">
+                        ${statusBadge}
+                    </td>
+                    <td class="px-md py-5 text-right align-top">
+                        <button class="text-on-surface-variant hover:text-primary-container transition-colors" onclick="alert('Threat: ${exp.name}\\nCVE/ID: ${exp.id}\\nTarget Node: ${exp.target}\\nIP Address: ${exp.ip}\\nPort: ${exp.port}\\nSeverity: ${exp.severity}\\n\\nDescription: ${exp.description}\\n\\nRemediation: ${exp.remediation}')">
+                            <span class="material-symbols-outlined">info</span>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('vuln-showing-text').textContent = `Showing ${filtered.length} of ${exploitsDatabase.length} vulnerabilities`;
+        }
+    });
+</script>
+</body></html>

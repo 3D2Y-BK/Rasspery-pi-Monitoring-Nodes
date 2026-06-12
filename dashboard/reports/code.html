@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<script>
+    // Authentication guard
+    if (sessionStorage.getItem('authenticated') !== 'true') {
+        window.location.href = '../login_screen/code.html';
+    }
+</script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SENTINEL-X | Security Reports</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- jsPDF library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#dce4e5",
+                        "primary-container": "#00e5ff",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#f3bf26",
+                        "on-surface-variant": "#bac9cc",
+                        "surface": "#0d1516",
+                        "surface-container-high": "#242b2d",
+                        "outline": "#849396",
+                        "on-primary-fixed": "#001f24",
+                        "on-secondary-fixed": "#131c2b",
+                        "secondary-container": "#40495b",
+                        "outline-variant": "#3b494c",
+                        "tertiary": "#ffeac0",
+                        "surface-dim": "#0d1516",
+                        "on-primary-container": "#00626e",
+                        "on-primary": "#00363d",
+                        "surface-container-highest": "#2e3638",
+                        "on-secondary": "#283141",
+                        "surface-container-lowest": "#080f11",
+                        "on-secondary-container": "#afb8cd",
+                        "inverse-on-surface": "#2a3233",
+                        "secondary-fixed-dim": "#bec7dc",
+                        "on-error": "#690005",
+                        "background": "#0d1516",
+                        "tertiary-container": "#fec931",
+                        "on-primary-fixed-variant": "#004f58",
+                        "secondary": "#bec7dc",
+                        "secondary-fixed": "#dae2f9",
+                        "on-tertiary-container": "#6f5500",
+                        "primary-fixed": "#9cf0ff",
+                        "primary-fixed-dim": "#00daf3",
+                        "surface-bright": "#333a3c",
+                        "surface-container": "#192122",
+                        "tertiary-fixed": "#ffdf96",
+                        "surface-tint": "#00daf3",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#594400",
+                        "error-container": "#93000a",
+                        "inverse-primary": "#006875",
+                        "primary": "#c3f5ff",
+                        "surface-container-low": "#151d1e",
+                        "on-surface": "#dce4e5",
+                        "on-background": "#dce4e5",
+                        "on-tertiary": "#3e2e00",
+                        "on-secondary-fixed-variant": "#3e4758",
+                        "on-tertiary-fixed": "#251a00",
+                        "surface-variant": "#2e3638"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin": "24px",
+                        "xs": "4px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "md": "16px",
+                        "sm": "8px",
+                        "lg": "24px",
+                        "xl": "32px"
+                    },
+                    "fontFamily": {
+                        "body-base": ["Inter"],
+                        "label-tech": ["Space Grotesk"],
+                        "body-sm": ["Inter"],
+                        "h1": ["Inter"],
+                        "h2": ["Inter"],
+                        "code": ["monospace"]
+                    },
+                    "fontSize": {
+                        "body-base": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "label-tech": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-sm": ["14px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "h1": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "h2": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "code": ["13px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; min-height: max(884px, 100dvh); }
+        .label-tech { font-family: 'Space Grotesk', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased min-h-screen pb-12">
+<!-- TopAppBar -->
+<header class="bg-[#0D1117] text-[#00E5FF] font-inter text-xs tracking-widest uppercase font-semibold fixed top-0 left-0 right-0 z-50 flex justify-between items-center w-full px-6 h-16 border-b border-[#161B22]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#00E5FF] text-2xl" data-icon="shield_with_heart" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span>
+<span class="text-lg font-black tracking-tighter text-[#00E5FF] font-mono">SYSTEM_SURVEILLANCE_v4.2</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-2 mr-2">
+<span class="w-2 h-2 rounded-full bg-[#00E5FF] animate-pulse"></span>
+<span class="font-inter text-xs tracking-widest uppercase font-semibold text-[#00E5FF]">REPORTS_CENTER</span>
+</div>
+<img alt="Operator" class="w-8 h-8 rounded-full border border-primary-container/20 cursor-pointer active:scale-95 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvJTThA2-Rbtv8VvfdxLS56v3Z00LXzI2dlDHYypHPiK5GUme1q3B5iElDN1xvVOsvaQ9AT9ErsD8YfPXsyXODyw_PmHfpD5BJfW9TiE0qDAfSm9yQAhdFa658nxc3sA-_wW5lAzQWnH8BptYnV_Fkv9XKa2z3vwD8KScdVZiJcLPkIA_JA5TIYi9YQAX4udNy2kV5meNg-aTEgowoG7Ohd_wtMyaD0xSpkAmvp0-uTc-_KYUjeQ6kFBSFTyt2gT0pvyWTJyk9BF8"/>
+</div>
+</header>
+
+<!-- Navigation Shell -->
+<nav class="hidden md:flex fixed left-0 top-0 h-full flex flex-col pt-16 bg-[#05070A] text-[#00E5FF] font-inter text-sm tracking-tight h-full w-64 border-r border-[#161B22] shadow-none z-40">
+<div class="px-6 py-8 border-b border-[#161B22]">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-[#161B22] flex items-center justify-center">
+<span class="material-symbols-outlined text-[#00E5FF]">person</span>
+</div>
+<div>
+<div id="operator-display-name" class="text-[#00E5FF] font-mono font-bold">OPERATOR_01</div>
+<div class="text-slate-500 text-[10px] uppercase">Privilege: Root</div>
+</div>
+</div>
+</div>
+<div class="flex-1 py-4">
+<a class="text-slate-500 py-3 px-4 flex items-center gap-3 hover:bg-[#0D1117] hover:text-[#00E5FF] transition-colors cursor-pointer" href="../main_dashboard/code.html">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="text-slate-500 py-3 px-4 flex items-center gap-3 hover:bg-[#0D1117] hover:text-[#00E5FF] transition-colors cursor-pointer" href="../network_map/code.html">
+<span class="material-symbols-outlined" data-icon="lan">lan</span>
+<span>Network Map</span>
+</a>
+<a class="text-slate-500 py-3 px-4 flex items-center gap-3 hover:bg-[#0D1117] hover:text-[#00E5FF] transition-colors cursor-pointer" href="../vulnerabilities/code.html">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span>Vulnerabilities</span>
+</a>
+<a class="text-slate-500 py-3 px-4 flex items-center gap-3 hover:bg-[#0D1117] hover:text-[#00E5FF] transition-colors cursor-pointer" href="../exploitation_results/code.html">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span>Exploitation</span>
+</a>
+<a class="text-[#00E5FF] bg-[#161B22]/50 border-r-2 border-[#00E5FF] py-3 px-4 flex items-center gap-3 cursor-pointer" href="../reports/code.html">
+<span class="material-symbols-outlined" data-icon="description" style="font-variation-settings: 'FILL' 1;">description</span>
+<span>Reports</span>
+</a>
+<a class="text-slate-500 py-3 px-4 flex items-center gap-3 hover:bg-[#0D1117] hover:text-[#00E5FF] transition-colors cursor-pointer" href="../settings/code.html">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</nav>
+
+<!-- Main Content Canvas -->
+<main class="md:ml-64 pt-20 pb-24 px-4 md:px-margin min-h-screen bg-background max-w-5xl mx-auto">
+<div class="mb-lg">
+<h1 class="font-h1 text-h1 text-on-background mb-sm">Audit & Compliance Reports</h1>
+<p class="text-on-surface-variant font-body-sm max-w-2xl">Compile Active Directory threat data into a formal, printer-friendly PDF document containing executive summaries, details of findings, and remediation steps.</p>
+</div>
+
+<!-- Controls Panel -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Left Side: Selection Criteria -->
+<div class="md:col-span-7 bg-surface-container-low border border-outline-variant p-6 rounded-xl space-y-6">
+<h2 class="font-label-tech text-label-tech text-primary-container uppercase tracking-wider mb-2">Report Compilation Configuration</h2>
+
+<!-- Target Select -->
+<div class="space-y-sm">
+<label class="font-label-tech text-on-surface-variant uppercase text-[11px] block">Target Audit Scope</label>
+<select id="report-target" class="w-full bg-surface-container-lowest border border-outline-variant rounded-md px-3 py-2.5 text-body-sm text-white focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none appearance-none">
+<option value="all">All Network Targets (Domain & Workstations)</option>
+<option value="ad">Active Directory Domain Controller (DC-AD-01)</option>
+<option value="client">Client Workstation (CL-WIN-10)</option>
+</select>
+</div>
+
+<!-- Severity Filters -->
+<div class="space-y-sm">
+<label class="font-label-tech text-on-surface-variant uppercase text-[11px] block">Severity Levels to Include</label>
+<div class="grid grid-cols-3 gap-2">
+<label class="flex items-center gap-2 bg-surface-container-high border border-outline-variant/30 p-3 rounded-lg cursor-pointer hover:border-primary-container/40 transition-all">
+<input type="checkbox" id="include-critical" checked class="rounded border-outline-variant bg-surface-container-lowest text-primary-container focus:ring-primary-container"/>
+<span class="font-mono text-xs text-error font-bold">Critical</span>
+</label>
+<label class="flex items-center gap-2 bg-surface-container-high border border-outline-variant/30 p-3 rounded-lg cursor-pointer hover:border-primary-container/40 transition-all">
+<input type="checkbox" id="include-high" checked class="rounded border-outline-variant bg-surface-container-lowest text-primary-container focus:ring-primary-container"/>
+<span class="font-mono text-xs text-orange-400 font-bold">High</span>
+</label>
+<label class="flex items-center gap-2 bg-surface-container-high border border-outline-variant/30 p-3 rounded-lg cursor-pointer hover:border-primary-container/40 transition-all">
+<input type="checkbox" id="include-medium" checked class="rounded border-outline-variant bg-surface-container-lowest text-primary-container focus:ring-primary-container"/>
+<span class="font-mono text-xs text-primary-container font-bold">Medium</span>
+</label>
+</div>
+</div>
+
+<!-- Extra fields -->
+<div class="space-y-sm">
+<label class="font-label-tech text-on-surface-variant uppercase text-[11px] block">Formatting Options</label>
+<div class="space-y-2">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input type="checkbox" id="opt-remediation" checked class="rounded border-outline-variant bg-surface-container-highest text-primary-container focus:ring-primary-container"/>
+<span class="font-body-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Include remediation recommendations</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input type="checkbox" id="opt-payloads" checked class="rounded border-outline-variant bg-surface-container-highest text-primary-container focus:ring-primary-container"/>
+<span class="font-body-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Include raw exploit payloads</span>
+</label>
+</div>
+</div>
+
+<!-- Action Trigger -->
+<div class="pt-4">
+<button id="btn-generate-report" class="w-full bg-primary-container text-[#05070A] font-label-tech font-bold py-4 rounded-lg tracking-[0.1em] uppercase hover:shadow-[0_0_20px_rgba(0,229,255,0.4)] transition-all active:scale-[0.98] flex items-center justify-center gap-3">
+<span class="material-symbols-outlined text-[22px]">picture_as_pdf</span>
+                    Generate and Download PDF Report
+                </button>
+</div>
+</div>
+
+<!-- Right Side: Live Summary & Preview Details -->
+<div class="md:col-span-5 bg-surface-container-low border border-[#161B22] p-6 rounded-xl flex flex-col justify-between">
+<div>
+<h3 class="font-label-tech text-label-tech text-[#00E5FF] uppercase tracking-wider mb-4">Report Details Summary</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="text-xs text-slate-400">Security Operator:</span>
+<span class="text-xs text-white font-mono font-bold" id="lbl-operator">MAHDI</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="text-xs text-slate-400">Classification Level:</span>
+<span class="text-[10px] font-bold bg-error-container/20 text-error border border-error/30 px-2 py-0.5 rounded font-mono">RESTRICTED_ROOT</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="text-xs text-slate-400">Active Directory Scope:</span>
+<span class="text-xs text-white font-mono" id="lbl-scope">All Targets</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
+<span class="text-xs text-slate-400">Total Vulnerability Records:</span>
+<span class="text-xs text-primary-container font-mono font-bold" id="lbl-total-count">7 exploits</span>
+</div>
+</div>
+</div>
+
+<div class="mt-6 p-4 bg-surface-container-high/40 rounded border border-outline-variant/30 text-left">
+<span class="material-symbols-outlined text-primary-container mb-2 text-3xl">verified_user</span>
+<h4 class="text-xs font-bold text-white uppercase mb-1">Compliance Standard</h4>
+<p class="text-[10px] text-slate-400 leading-normal">This audit report is generated dynamically using active directory schema validations complying with ISO 27001 Annex A.12 and NIST SP 800-53 security controls.</p>
+</div>
+</div>
+</div>
+</main>
+
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#0D1117] border-t border-[#161B22] flex justify-around items-center px-4 z-50">
+<a class="flex flex-col items-center gap-1 text-slate-500 hover:text-[#00E5FF] transition-all cursor-pointer" href="../main_dashboard/code.html">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-label-tech">DASHBOARD</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 hover:text-[#00E5FF] transition-all cursor-pointer" href="../network_map/code.html">
+<span class="material-symbols-outlined">lan</span>
+<span class="text-[10px] font-label-tech">NETWORK</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 hover:text-[#00E5FF] transition-all cursor-pointer" href="../vulnerabilities/code.html">
+<span class="material-symbols-outlined">security</span>
+<span class="text-[10px] font-label-tech">VULNS</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 hover:text-[#00E5FF] transition-all cursor-pointer" href="../exploitation_results/code.html">
+<span class="material-symbols-outlined">terminal</span>
+<span class="text-[10px] font-label-tech">EXPLOIT</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-[#00E5FF] transition-all cursor-pointer" href="../reports/code.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">description</span>
+<span class="text-[10px] font-label-tech">REPORTS</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 hover:text-[#00E5FF] transition-all cursor-pointer" href="../settings/code.html">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-label-tech">SETTINGS</span>
+</a>
+</nav>
+
+<!-- PDF Preview Modal -->
+<div id="preview-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-surface-container border border-outline-variant w-full max-w-4xl h-[90vh] rounded-xl flex flex-col overflow-hidden shadow-2xl">
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center p-4 border-b border-[#161B22] bg-[#0D1117] text-[#00E5FF]">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+                <span class="font-mono text-xs font-bold uppercase tracking-wider">Report Compiler Preview</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-[10px] text-slate-500 hidden sm:inline">Use the preview controls to print or save the document</span>
+                <button id="btn-close-preview" class="text-slate-400 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined text-lg">close</span>
+                </button>
+            </div>
+        </div>
+        <!-- Modal Body -->
+        <div class="flex-1 bg-slate-900 relative">
+            <iframe id="pdf-preview-frame" class="w-full h-full border-none" src=""></iframe>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Fallback database in case fetch fails due to CORS
+    const fallbackExploits = [
+      { "id": "CVE-2020-1472", "name": "Zerologon Netlogon Privilege Escalation", "type": "RCE", "severity": "Critical", "target": "DC-AD-01 (Domain Controller)", "ip": "192.168.1.10", "description": "Allows complete domain controller takeover using zero netlogon tokens.", "status": "Exploited", "discovered_at": "12m ago", "port": 445, "payload": "python zero_logon_dump.py -t 192.168.1.10 -n DC-AD-01", "remediation": "Apply KB4565351 patch and enforce secure Netlogon channel connections." },
+      { "id": "CVE-2021-34527", "name": "PrintNightmare Spooler Service RCE", "type": "RCE", "severity": "Critical", "target": "DC-AD-01 (Domain Controller)", "ip": "192.168.1.10", "description": "Remote code execution via printer driver DLL injection.", "status": "Exploited", "discovered_at": "28m ago", "port": 445, "payload": "python print_nightmare.py -dll malice.dll -t 192.168.1.10", "remediation": "Disable Print Spooler on DC where printing is not required." },
+      { "id": "CVE-2021-26855", "name": "ProxyLogon SSRF & Remote Code Execution", "type": "RCE", "severity": "Critical", "target": "DC-AD-01 (Exchange Server)", "ip": "192.168.1.10", "description": "Exchange pre-auth SSRF.", "status": "Vulnerable", "discovered_at": "1h ago", "port": 443, "payload": "python proxylogon_exploit.py --rhost 192.168.1.10 --email administrator@sentinel.local", "remediation": "Apply Exchange server security updates KB5000871." },
+      { "id": "CVE-2019-0708", "name": "BlueKeep Remote Desktop Services RCE", "type": "RCE", "severity": "Critical", "target": "CL-WIN-10 (Client Workstation)", "ip": "192.168.1.50", "description": "Remote code execution via remote desktop services channel corruption.", "status": "Exploited", "discovered_at": "4h ago", "port": 3389, "payload": "use exploit/windows/rdp/cve_2019_0708_bluekeep; set RHOSTS 192.168.1.50; run", "remediation": "Enforce Network Level Authentication (NLA) and apply KB4499175." },
+      { "id": "GPO-01", "name": "SMB Signing Not Enforced Policy", "type": "Policy", "severity": "High", "target": "CL-WIN-10 & DC-AD-01", "ip": "192.168.1.0/24", "description": "NTLM Relay authentication enabled due to signing policy configuration.", "status": "Exploited", "discovered_at": "3h ago", "port": 445, "payload": "python ntlmrelayx.py -tf targets.txt -smb2support -c 'whoami'", "remediation": "Configure Active Directory Group Policy to enforce SMB signing (always)." },
+      { "id": "GPO-02", "name": "SYSVOL Group Policy Password Exposure", "type": "Policy", "severity": "High", "target": "DC-AD-01 (SYSVOL)", "ip": "192.168.1.10", "description": "Decryption of passwords stored inside SYSVOL shares.", "status": "Vulnerable", "discovered_at": "5h ago", "port": 445, "payload": "gpp-decrypt 'j3...8s' /sysvol/Policies/Groups.xml", "remediation": "Apply KB2962486 and scan SYSVOL for passwords xml files to purge." },
+      { "id": "MED-01", "name": "LLMNR/NBT-NS Poisoning Active", "type": "Normal", "severity": "Medium", "target": "CL-WIN-10 (Client Workstation)", "ip": "192.168.1.50", "description": "LLMNR broadcasting active, susceptible to spoofing attacks.", "status": "Exploited", "discovered_at": "8h ago", "port": 5355, "payload": "responder -I eth0 -w -d -v", "remediation": "Disable LLMNR via Group Policy and disable NetBIOS over TCP/IP." }
+    ];
+
+    let exploitsDatabase = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+        // Set operator name
+        const operatorName = sessionStorage.getItem('operator') || 'MAHDI';
+        const operatorEl = document.getElementById('operator-display-name');
+        if (operatorEl) {
+            operatorEl.textContent = operatorName;
+        }
+        document.getElementById('lbl-operator').textContent = operatorName;
+
+        // Fetch database
+        fetch('../exploits.json')
+            .then(res => res.json())
+            .then(data => {
+                exploitsDatabase = data;
+                updateLabels();
+            })
+            .catch(err => {
+                console.warn("Using fallback database on reports generator due to CORS:", err);
+                exploitsDatabase = fallbackExploits;
+                updateLabels();
+            });
+
+        // Listen to changes for labels updating
+        document.getElementById('report-target').addEventListener('change', updateLabels);
+
+        function updateLabels() {
+            const scopeVal = document.getElementById('report-target').value;
+            const scopeLbl = document.getElementById('lbl-scope');
+            let count = 0;
+
+            if (scopeVal === 'all') {
+                scopeLbl.textContent = "All Targets";
+                count = exploitsDatabase.length;
+            } else if (scopeVal === 'ad') {
+                scopeLbl.textContent = "DC-AD-01";
+                count = exploitsDatabase.filter(e => e.target.includes("DC-AD-01") || e.target.includes("DC-AD-01 & CL-WIN-10")).length;
+            } else if (scopeVal === 'client') {
+                scopeLbl.textContent = "CL-WIN-10";
+                count = exploitsDatabase.filter(e => e.target.includes("CL-WIN-10") || e.target.includes("CL-WIN-10 & DC-AD-01")).length;
+            }
+
+            document.getElementById('lbl-total-count').textContent = count + " exploits matching scope";
+        }
+
+        // Add generate listener
+        document.getElementById('btn-generate-report').addEventListener('click', generatePDF);
+
+        function generatePDF() {
+            try {
+                const scopeVal = document.getElementById('report-target').value;
+            const inclCrit = document.getElementById('include-critical').checked;
+            const inclHigh = document.getElementById('include-high').checked;
+            const inclMed = document.getElementById('include-medium').checked;
+            const incRemediation = document.getElementById('opt-remediation').checked;
+            const incPayload = document.getElementById('opt-payloads').checked;
+
+            // Filter exploits
+            const selectedSeverities = [];
+            if (inclCrit) selectedSeverities.push("critical");
+            if (inclHigh) selectedSeverities.push("high");
+            if (inclMed) selectedSeverities.push("medium", "normal"); // include normal as medium
+
+            let filteredExploits = exploitsDatabase.filter(exp => {
+                // Scope check
+                let matchesScope = false;
+                if (scopeVal === 'all') {
+                    matchesScope = true;
+                } else if (scopeVal === 'ad') {
+                    matchesScope = exp.target.includes("DC-AD-01") || exp.target.includes("DC-AD-01 & CL-WIN-10");
+                } else if (scopeVal === 'client') {
+                    matchesScope = exp.target.includes("CL-WIN-10") || exp.target.includes("CL-WIN-10 & DC-AD-01");
+                }
+
+                // Severity check
+                const matchesSeverity = selectedSeverities.includes(exp.severity.toLowerCase());
+
+                return matchesScope && matchesSeverity;
+            });
+
+            if (filteredExploits.length === 0) {
+                alert("Cannot compile report: The selected filters yielded 0 exploits.");
+                return;
+            }
+
+            // PDF generation setup
+            const jspdfObj = window.jspdf || window.jsPDF;
+            if (!jspdfObj) {
+                alert("jsPDF library failed to load. Please verify your internet connection.");
+                return;
+            }
+            const jsPDF = jspdfObj.jsPDF || jspdfObj;
+            const doc = new jsPDF('p', 'mm', 'a4'); // standard 210mm x 297mm
+
+            let yPos = 15;
+
+            // Helper to draw header
+            function drawHeaderPage(doc, titleStr) {
+                // Background dark header banner
+                doc.setFillColor(13, 21, 22); // #0D1516
+                doc.rect(0, 0, 210, 38, 'F');
+                
+                // Cyan bottom border for banner
+                doc.setDrawColor(0, 229, 255); // #00E5FF
+                doc.setLineWidth(1.5);
+                doc.line(0, 38, 210, 38);
+
+                // Title Text
+                doc.setTextColor(0, 229, 255);
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(18);
+                doc.text("SENTINEL-X SECURITY AUDIT", 14, 16);
+
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(10);
+                doc.text("COMPLIANCE & THREAT AUDIT REPORT", 14, 23);
+                doc.text("CLASSIFICATION: RESTRICTED ROOT ACCESS", 14, 29);
+
+                // Sentinel Shield Graphic
+                doc.setDrawColor(0, 229, 255);
+                doc.setLineWidth(0.5);
+                // Draw a simple shield shape in top right using standard lines
+                doc.line(180, 8, 195, 5);
+                doc.line(195, 5, 195, 20);
+                doc.line(195, 20, 180, 32);
+                doc.line(180, 32, 165, 20);
+                doc.line(165, 20, 165, 5);
+                doc.line(165, 5, 180, 8);
+                doc.setTextColor(0, 229, 255);
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(14);
+                doc.text("S-X", 175, 20);
+
+                yPos = 52;
+            }
+
+            // Draw header on first page
+            drawHeaderPage(doc);
+
+            // Audit Metadata Table
+            doc.setTextColor(13, 21, 22); // dark slate/black text
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(12);
+            doc.text("1. AUDIT SPECIFICATIONS", 14, yPos);
+            yPos += 6;
+
+            // Draw a metadata box
+            doc.setDrawColor(84, 147, 150);
+            doc.setFillColor(245, 247, 247);
+            doc.setLineWidth(0.5);
+            doc.rect(14, yPos, 182, 38, 'FD');
+
+            doc.setFontSize(9);
+            doc.setTextColor(40, 40, 40);
+            doc.setFont("helvetica", "bold");
+            doc.text("Report ID:", 18, yPos + 6);
+            doc.text("Timestamp:", 18, yPos + 14);
+            doc.text("Audit Scope:", 18, yPos + 22);
+            doc.text("Auditor Operator:", 18, yPos + 30);
+
+            doc.setFont("helvetica", "normal");
+            const reportId = "SXT-" + Math.floor(100000 + Math.random() * 900000);
+            const dateStr = new Date().toLocaleString();
+            doc.text(reportId, 50, yPos + 6);
+            doc.text(dateStr, 50, yPos + 14);
+            doc.text(scopeVal === 'all' ? "Entire LAB subnet scope (192.168.1.0/24)" : (scopeVal === 'ad' ? "Domain Controller DC-AD-01 (192.168.1.10)" : "Workstation CL-WIN-10 (192.168.1.50)"), 50, yPos + 22);
+            doc.text(operatorName + " (Operator ROOT Clearance Enforced)", 50, yPos + 30);
+
+            yPos += 48;
+
+            // Executive Summary
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(12);
+            doc.text("2. EXECUTIVE SUMMARY", 14, yPos);
+            yPos += 6;
+
+            const totalCount = filteredExploits.length;
+            const exploitedCount = filteredExploits.filter(e => e.status === 'Exploited').length;
+            const criticalCount = filteredExploits.filter(e => e.severity === 'Critical').length;
+            
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(10);
+            doc.setTextColor(60, 60, 60);
+            
+            let summaryText = `During the security audit, a total of ${totalCount} exploit vulnerabilities were identified matching the audit criteria. Out of these, ${exploitedCount} exploits are actively compromised (status EXPLOITED), posing immediate takeover threats to the Active Directory domain environment. A total of ${criticalCount} exploits represent Critical (RCE) vulnerabilities. immediate mitigation is highly recommended to protect critical network nodes.`;
+            
+            const splitSummary = doc.splitTextToSize(summaryText, 182);
+            doc.text(splitSummary, 14, yPos);
+            yPos += splitSummary.length * 5 + 6;
+
+            // 3. Vulnerability findings details header
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(12);
+            doc.setTextColor(13, 21, 22);
+            doc.text("3. DETAILED VULNERABILITY FINDINGS", 14, yPos);
+            yPos += 8;
+
+            // Draw table header
+            doc.setFillColor(230, 235, 235);
+            doc.rect(14, yPos, 182, 8, 'F');
+            doc.setDrawColor(200, 200, 200);
+            doc.rect(14, yPos, 182, 8);
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "bold");
+            doc.text("CVE/ID", 16, yPos + 5.5);
+            doc.text("Vulnerability Name", 45, yPos + 5.5);
+            doc.text("Target Host", 115, yPos + 5.5);
+            doc.text("Severity", 160, yPos + 5.5);
+            doc.text("Status", 180, yPos + 5.5);
+
+            yPos += 8;
+
+            // Iterate over exploits to render list table
+            filteredExploits.forEach((exp, idx) => {
+                // Draw cell borders
+                doc.setDrawColor(220, 220, 220);
+                doc.line(14, yPos, 196, yPos); // top border line
+                
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(8.5);
+                doc.text(exp.id, 16, yPos + 5);
+
+                doc.setFont("helvetica", "normal");
+                // truncate name if too long
+                let nameTrunc = exp.name;
+                if (nameTrunc.length > 35) nameTrunc = nameTrunc.substring(0, 32) + "...";
+                doc.text(nameTrunc, 45, yPos + 5);
+                doc.text(exp.target.split(" ")[0], 115, yPos + 5);
+                
+                // Severity styling
+                if (exp.severity === 'Critical') {
+                    doc.setTextColor(165, 0, 0); // red
+                    doc.setFont("helvetica", "bold");
+                } else if (exp.severity === 'High') {
+                    doc.setTextColor(190, 80, 0); // orange
+                } else {
+                    doc.setTextColor(40, 40, 40);
+                }
+                doc.text(exp.severity, 160, yPos + 5);
+                
+                doc.setTextColor(40, 40, 40);
+                doc.setFont("helvetica", "normal");
+                doc.text(exp.status, 180, yPos + 5);
+
+                yPos += 8;
+            });
+            yPos += 10;
+
+            // Page 2: Detailed findings breakdowns & Remediation
+            doc.addPage();
+            // Header for Page 2
+            doc.setFillColor(13, 21, 22);
+            doc.rect(0, 0, 210, 20, 'F');
+            doc.setDrawColor(0, 229, 255);
+            doc.line(0, 20, 210, 20);
+            doc.setTextColor(0, 229, 255);
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(10);
+            doc.text("SENTINEL-X SECURITY AUDIT | REPORT SPECIFICATIONS & TECHNICAL DETAILS", 14, 13);
+            
+            yPos = 32;
+
+            filteredExploits.forEach((exp, idx) => {
+                // Check page height limit to avoid clipping
+                if (yPos > 240) {
+                    doc.addPage();
+                    // Header for new page
+                    doc.setFillColor(13, 21, 22);
+                    doc.rect(0, 0, 210, 20, 'F');
+                    doc.setDrawColor(0, 229, 255);
+                    doc.line(0, 20, 210, 20);
+                    doc.setTextColor(0, 229, 255);
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(10);
+                    doc.text("SENTINEL-X SECURITY AUDIT | REPORT SPECIFICATIONS & TECHNICAL DETAILS", 14, 13);
+                    yPos = 32;
+                }
+
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(11);
+                doc.setTextColor(13, 21, 22);
+                doc.text(`${idx + 1}. Technical Audit: ${exp.id} - ${exp.name}`, 14, yPos);
+                yPos += 6;
+
+                // Border box for vulnerability specs
+                doc.setFillColor(250, 251, 251);
+                doc.setDrawColor(220, 220, 220);
+                
+                // Let's compute box height dynamically based on choices
+                let boxHeight = 22;
+                if (incPayload) boxHeight += 12;
+                if (incRemediation) boxHeight += 12;
+
+                doc.rect(14, yPos, 182, boxHeight, 'FD');
+
+                doc.setFontSize(8.5);
+                doc.setTextColor(40, 40, 40);
+                doc.setFont("helvetica", "bold");
+                doc.text("Target Node/IP:", 18, yPos + 5);
+                doc.text("Threat Level:", 18, yPos + 10);
+                doc.text("Exploit Summary:", 18, yPos + 15);
+
+                doc.setFont("helvetica", "normal");
+                doc.text(`${exp.target} (${exp.ip} port ${exp.port})`, 48, yPos + 5);
+                doc.text(`${exp.severity} (Status: ${exp.status})`, 48, yPos + 10);
+                
+                const splitDesc = doc.splitTextToSize(exp.description, 140);
+                doc.text(splitDesc, 48, yPos + 15);
+
+                let offsetPos = yPos + 15 + (splitDesc.length * 4.5);
+
+                // Inject payload command
+                if (incPayload) {
+                    doc.setFont("helvetica", "bold");
+                    doc.text("Payload Payload:", 18, offsetPos);
+                    doc.setFont("courier", "bold");
+                    doc.setFontSize(8);
+                    const splitPayload = doc.splitTextToSize(exp.payload, 140);
+                    doc.text(splitPayload, 48, offsetPos);
+                    offsetPos += (splitPayload.length * 4.5) + 1;
+                }
+
+                // Inject Remediation GPO
+                if (incRemediation) {
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(8.5);
+                    doc.text("Remediation checklist:", 18, offsetPos);
+                    doc.setFont("helvetica", "normal");
+                    const splitRemediation = doc.splitTextToSize(exp.remediation, 140);
+                    doc.text(splitRemediation, 48, offsetPos);
+                    offsetPos += (splitRemediation.length * 4.5);
+                }
+
+                yPos = offsetPos + 8;
+            });
+
+            // Compliance Stamp / Signoff
+            if (yPos > 240) {
+                doc.addPage();
+                // Header
+                doc.setFillColor(13, 21, 22);
+                doc.rect(0, 0, 210, 20, 'F');
+                doc.setDrawColor(0, 229, 255);
+                doc.line(0, 20, 210, 20);
+                doc.setTextColor(0, 229, 255);
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(10);
+                doc.text("SENTINEL-X SECURITY AUDIT | REPORT SPECIFICATIONS & TECHNICAL DETAILS", 14, 13);
+                yPos = 32;
+            }
+
+            yPos += 5;
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(12);
+            doc.setTextColor(13, 21, 22);
+            doc.text("4. AUDIT SIGNOFF & ENFORCEMENT", 14, yPos);
+            yPos += 12;
+
+            doc.setDrawColor(200, 200, 200);
+            doc.line(14, yPos, 90, yPos);
+            doc.line(120, yPos, 196, yPos);
+
+            doc.setFontSize(8.5);
+            doc.setFont("helvetica", "normal");
+            doc.text("Auditor Signature", 14, yPos + 4.5);
+            doc.text("Mahdi, Security Operations Lead", 14, yPos + 9);
+
+            doc.text("Active Directory Security Admin Approval", 120, yPos + 4.5);
+            doc.text("SENTINEL-X Central Controller Node", 120, yPos + 9);
+
+            // Add standard footers to pages
+            const pagesCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pagesCount; i++) {
+                doc.setPage(i);
+                doc.setDrawColor(230, 230, 230);
+                doc.setLineWidth(0.5);
+                doc.line(14, 285, 196, 285);
+                doc.setFontSize(7.5);
+                doc.setTextColor(120, 120, 120);
+                doc.text("SENTINEL-X INTERNAL AUDIT REPORT • CLASSIFIED RESTRICTED • Directive 802.1x Compliant", 14, 289);
+                doc.text("Page " + i + " of " + pagesCount, 185, 289);
+            }
+
+            // Save PDF
+            try {
+                doc.save("sentinel-x_audit_report.pdf");
+            } catch (saveErr) {
+                console.warn("Direct download blocked by browser security policy (common on file:// protocol):", saveErr);
+            }
+
+            // Display in Modal Preview
+            try {
+                const blob = doc.output('blob');
+                const blobUrl = URL.createObjectURL(blob);
+                document.getElementById('pdf-preview-frame').src = blobUrl;
+                document.getElementById('preview-modal').classList.remove('hidden');
+            } catch (previewErr) {
+                console.error("PDF preview generation failed:", previewErr);
+            }
+
+            } catch (err) {
+                console.error("PDF generation failed:", err);
+                alert("PDF Generation Failed: " + err.message + "\n\nStack:\n" + err.stack);
+            }
+        }
+
+        // Close preview modal event listener
+        document.getElementById('btn-close-preview').addEventListener('click', () => {
+            document.getElementById('preview-modal').classList.add('hidden');
+            document.getElementById('pdf-preview-frame').src = "";
+        });
+    });
+</script>
+</body></html>

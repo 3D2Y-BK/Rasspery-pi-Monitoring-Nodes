@@ -1,0 +1,10 @@
+# Required Metadata mapped to your SonarCloud account
+sonar.organization=omar-saadaoui
+sonar.projectKey=omar-saadaoui_Rasspery-pi-Monitoring-NodesNew
+sonar.projectName=Rasspery-pi-Monitoring-NodesNew
+
+# Where the scanner should look for source files (the dot means the entire repo)
+sonar.sources=.
+
+# Files and folders you want to skip scanning (adjust if needed)
+sonar.exclusions=**/vendor/**, **/node_modules/**, dist/**, build/**

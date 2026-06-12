@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<script>
+    // Authentication guard
+    if (sessionStorage.getItem('authenticated') !== 'true') {
+        window.location.href = '../login_screen/code.html';
+    }
+</script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SENTINEL-X | Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#dce4e5",
+                        "primary-container": "#00e5ff",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#f3bf26",
+                        "on-surface-variant": "#bac9cc",
+                        "surface": "#0d1516",
+                        "surface-container-high": "#242b2d",
+                        "outline": "#849396",
+                        "on-primary-fixed": "#001f24",
+                        "on-secondary-fixed": "#131c2b",
+                        "secondary-container": "#40495b",
+                        "outline-variant": "#3b494c",
+                        "tertiary": "#ffeac0",
+                        "surface-dim": "#0d1516",
+                        "on-primary-container": "#00626e",
+                        "on-primary": "#00363d",
+                        "surface-container-highest": "#2e3638",
+                        "on-secondary": "#283141",
+                        "surface-container-lowest": "#080f11",
+                        "on-secondary-container": "#afb8cd",
+                        "inverse-on-surface": "#2a3233",
+                        "secondary-fixed-dim": "#bec7dc",
+                        "on-error": "#690005",
+                        "background": "#0d1516",
+                        "tertiary-container": "#fec931",
+                        "on-primary-fixed-variant": "#004f58",
+                        "secondary": "#bec7dc",
+                        "secondary-fixed": "#dae2f9",
+                        "on-tertiary-container": "#6f5500",
+                        "primary-fixed": "#9cf0ff",
+                        "primary-fixed-dim": "#00daf3",
+                        "surface-bright": "#333a3c",
+                        "surface-container": "#192122",
+                        "tertiary-fixed": "#ffdf96",
+                        "surface-tint": "#00daf3",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#594400",
+                        "error-container": "#93000a",
+                        "inverse-primary": "#006875",
+                        "primary": "#c3f5ff",
+                        "surface-container-low": "#151d1e",
+                        "on-surface": "#dce4e5",
+                        "on-background": "#dce4e5",
+                        "on-tertiary": "#3e2e00",
+                        "on-secondary-fixed-variant": "#3e4758",
+                        "on-tertiary-fixed": "#251a00",
+                        "surface-variant": "#2e3638"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin": "24px",
+                        "xs": "4px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "md": "16px",
+                        "sm": "8px",
+                        "lg": "24px",
+                        "xl": "32px"
+                    },
+                    "fontFamily": {
+                        "body-base": ["Inter"],
+                        "label-tech": ["Space Grotesk"],
+                        "body-sm": ["Inter"],
+                        "h1": ["Inter"],
+                        "h2": ["Inter"],
+                        "code": ["monospace"]
+                    },
+                    "fontSize": {
+                        "body-base": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "label-tech": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-sm": ["14px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "h1": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "h2": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "code": ["13px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; min-height: max(884px, 100dvh); }
+        .label-tech { font-family: 'Space Grotesk', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased min-h-screen pb-12">
+
+<!-- TopAppBar -->
+<header class="bg-[#0D1117] text-[#00E5FF] font-inter text-xs tracking-widest uppercase font-semibold fixed top-0 left-0 right-0 z-50 flex justify-between items-center w-full px-6 h-16 border-b border-[#161B22]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#00E5FF] text-2xl" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span>
+<span class="text-lg font-black tracking-tighter text-[#00E5FF] font-mono">SYSTEM_SURVEILLANCE_v4.2</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-2 mr-2">
+<span class="w-2 h-2 rounded-full bg-[#00E5FF] animate-pulse"></span>
+<span class="font-inter text-xs tracking-widest uppercase font-semibold text-[#00E5FF]">SYSTEM_SETTINGS</span>
+</div>
+<img id="header-avatar" alt="Operator" class="w-8 h-8 rounded-full border border-primary-container/20 cursor-pointer active:scale-95 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvJTThA2-Rbtv8VvfdxLS56v3Z00LXzI2dlDHYypHPiK5GUme1q3B5iElDN1xvVOsvaQ9AT9ErsD8YfPXsyXODyw_PmHfpD5BJfW9TiE0qDAfSm9yQAhdFa658nxc3sA-_wW5lAzQWnH8BptYnV_Fkv9XKa2z3vwD8KScdVZiJcLPkIA_JA5TIYi9YQAX4udNy2kV5meNg-aTEgowoG7Ohd_wtMyaD0xSpkAmvp0-uTc-_KYUjeQ6kFBSFTyt2gT0pvyWTJyk9BF8"/>
+</div>
+</header>
+
+<!-- Navigation Shell (Sidebar) -->
+<nav class="hidden md:flex fixed left-0 top-0 h-full flex flex-col pt-16 bg-[#05070A] text-[#00E5FF] font-inter text-sm tracking-tight h-full w-64 border-r border-[#161B22] shadow-none z-40">
+<div class="px-6 py-8 border-b border-[#161B22]">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-[#161B22] flex items-center justify-center">
+<span class="material-symbols-outlined text-[#00E5FF]">person</span>
+</div>
+<div>
+<div id="operator-display-name" class="text-[#00E5FF] font-mono font-bold">OPERATOR_01</div>
+<div class="text-slate-500 text-[10px] uppercase">Privilege: Root</div>
+</div>
+</div>
+</div>
+<div class="flex-1 py-4">
+<a class="text-slate-500 py-3 px-4 flex items-center gap-3 hover:bg-[#0D1117] hover:text-[#00E5FF] transition-colors cursor-pointer" href="../main_dashboard/code.html">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="text-slate-500 py-3 px-4 flex items-center gap-3 hover:bg-[#0D1117] hover:text-[#00E5FF] transition-colors cursor-pointer" href="../network_map/code.html">
+<span class="material-symbols-outlined">lan</span>
+<span>Network Map</span>
+</a>
+<a class="text-slate-500 py-3 px-4 flex items-center gap-3 hover:bg-[#0D1117] hover:text-[#00E5FF] transition-colors cursor-pointer" href="../vulnerabilities/code.html">
+<span class="material-symbols-outlined">security</span>
+<span>Vulnerabilities</span>
+</a>
+<a class="text-slate-500 py-3 px-4 flex items-center gap-3 hover:bg-[#0D1117] hover:text-[#00E5FF] transition-colors cursor-pointer" href="../exploitation_results/code.html">
+<span class="material-symbols-outlined">terminal</span>
+<span>Exploitation</span>
+</a>
+<a class="text-slate-500 py-3 px-4 flex items-center gap-3 hover:bg-[#0D1117] hover:text-[#00E5FF] transition-colors cursor-pointer" href="../reports/code.html">
+<span class="material-symbols-outlined">description</span>
+<span>Reports</span>
+</a>
+<a class="text-[#00E5FF] bg-[#161B22]/50 border-r-2 border-[#00E5FF] py-3 px-4 flex items-center gap-3 cursor-pointer" href="../settings/code.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span>Settings</span>
+</a>
+</div>
+<div class="p-6 border-t border-[#161B22]">
+<div class="flex items-center gap-2 mb-2">
+<div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
+<span class="text-[10px] text-slate-400 font-mono">STATUS: ONLINE</span>
+</div>
+</div>
+</nav>
+
+<!-- Main Content Canvas -->
+<main class="md:ml-64 pt-20 pb-24 px-4 md:px-margin min-h-screen bg-background max-w-5xl mx-auto">
+<div class="mb-lg">
+<h1 class="font-h1 text-h1 text-on-background mb-sm">System Settings</h1>
+<p class="text-on-surface-variant font-body-sm max-w-2xl">Configure global surveillance operational controls, credential sets, risk filters, and local system environments.</p>
+</div>
+
+<!-- Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Left Side: Main Forms -->
+<div class="md:col-span-8 space-y-6">
+
+<!-- Card: Operator Profile -->
+<div class="bg-surface-container border border-outline-variant rounded-xl p-6">
+<div class="flex items-center gap-3 border-b border-[#161B22] pb-4 mb-4">
+<span class="material-symbols-outlined text-primary-container text-2xl">account_circle</span>
+<h2 class="font-label-tech text-sm text-white uppercase tracking-wider">Operator Identity Configuration</h2>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="space-y-sm">
+<label class="font-label-tech text-on-surface-variant uppercase text-[11px] block">Operator Handle</label>
+<input id="set-username" type="text" class="w-full bg-surface-container-lowest border border-outline-variant rounded-md px-3 py-2 text-body-sm text-white focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none" value="mahdi"/>
+</div>
+<div class="space-y-sm">
+<label class="font-label-tech text-on-surface-variant uppercase text-[11px] block">Clearance Level</label>
+<select id="set-clearance" class="w-full bg-surface-container-lowest border border-outline-variant rounded-md px-3 py-2 text-body-sm text-white focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none">
+<option value="root">ROOT Clearance (Admin)</option>
+<option value="l2">LEVEL-2 Security Auditor</option>
+<option value="l1">LEVEL-1 Read-Only Operator</option>
+</select>
+</div>
+</div>
+</div>
+
+<!-- Card: Audit and Attack Controls -->
+<div class="bg-surface-container border border-outline-variant rounded-xl p-6">
+<div class="flex items-center gap-3 border-b border-[#161B22] pb-4 mb-4">
+<span class="material-symbols-outlined text-primary-container text-2xl">gavel</span>
+<h2 class="font-label-tech text-sm text-white uppercase tracking-wider">Audit & Threat Controls</h2>
+</div>
+<div class="space-y-4">
+<!-- Safe Mode Toggle -->
+<div class="flex items-center justify-between p-3 bg-surface-container-low border border-outline-variant/30 rounded-lg">
+<div>
+<h4 class="text-xs font-bold text-white uppercase font-mono">Safe Mode Enforcement</h4>
+<p class="text-[10px] text-slate-400">Enforces read-only simulations; prevents live exploit payloads from taking over real systems.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input type="checkbox" id="set-safemode" class="sr-only peer" checked/>
+<div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container peer-checked:after:bg-surface-dim"></div>
+</label>
+</div>
+
+<!-- Scanning parameters -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="space-y-sm">
+<label class="font-label-tech text-on-surface-variant uppercase text-[11px] block">Active Audit Subnet Scope</label>
+<input id="set-subnet" type="text" class="w-full bg-surface-container-lowest border border-outline-variant rounded-md px-3 py-2 text-body-sm text-white focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none" value="192.168.1.0/24"/>
+</div>
+<div class="space-y-sm">
+<label class="font-label-tech text-on-surface-variant uppercase text-[11px] block">Surveillance Logs Auto-Refresh</label>
+<select id="set-refresh" class="w-full bg-surface-container-lowest border border-outline-variant rounded-md px-3 py-2 text-body-sm text-white focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none">
+<option value="5">Every 5 seconds</option>
+<option value="15" selected>Every 15 seconds</option>
+<option value="30">Every 30 seconds</option>
+<option value="60">Every 60 seconds</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Card: Risk Alarm Thresholds -->
+<div class="bg-surface-container border border-outline-variant rounded-xl p-6">
+<div class="flex items-center gap-3 border-b border-[#161B22] pb-4 mb-4">
+<span class="material-symbols-outlined text-primary-container text-2xl">notifications_active</span>
+<h2 class="font-label-tech text-sm text-white uppercase tracking-wider">Alert & Alarm Thresholds</h2>
+</div>
+<div class="space-y-4">
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-mono">
+<span class="text-error font-bold uppercase">Critical Alarm Trigger</span>
+<span id="lbl-range-crit" class="text-white">75%</span>
+</div>
+<input type="range" id="range-crit" min="50" max="100" value="75" class="w-full h-1 bg-surface-container-lowest rounded-lg appearance-none cursor-pointer accent-primary-container"/>
+</div>
+
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-mono">
+<span class="text-orange-400 font-bold uppercase">High Severity Alarm Trigger</span>
+<span id="lbl-range-high" class="text-white">50%</span>
+</div>
+<input type="range" id="range-high" min="30" max="80" value="50" class="w-full h-1 bg-surface-container-lowest rounded-lg appearance-none cursor-pointer accent-primary-container"/>
+</div>
+</div>
+</div>
+
+</div>
+
+<!-- Right Side: Secondary Actions -->
+<div class="md:col-span-4 space-y-6">
+<!-- Save Widget -->
+<div class="bg-surface-container border border-[#161B22] p-6 rounded-xl flex flex-col justify-between">
+<div>
+<h3 class="font-label-tech text-label-tech text-[#00E5FF] uppercase tracking-wider mb-4">Configurations State</h3>
+<p class="text-xs text-slate-400 leading-normal mb-6">Saving updates will apply changes globally to your current Sentinel-X session. Authentication clearance headers will be re-signed.</p>
+</div>
+
+<button id="btn-save-settings" class="w-full bg-primary-container text-[#05070A] font-label-tech font-bold py-3.5 rounded-lg tracking-[0.1em] uppercase hover:shadow-[0_0_20px_rgba(0,229,255,0.4)] transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">save</span>
+            Save Configurations
+        </button>
+</div>
+
+<!-- Danger Zone Widget -->
+<div class="bg-surface-container border border-red-950/40 p-6 rounded-xl space-y-4">
+<h3 class="font-label-tech text-label-tech text-error uppercase tracking-wider mb-2">Danger Zone</h3>
+<div class="p-3 bg-red-950/10 border border-red-900/30 rounded-lg">
+<p class="text-[10px] text-slate-400 leading-relaxed mb-3">Terminate active surveillance session immediately. This clears cached operator credentials and resets target domain data logs.</p>
+<button id="btn-logout" class="w-full bg-red-950/60 border border-red-500/30 text-error hover:bg-red-900/50 hover:text-white font-label-tech font-bold py-2 px-3 rounded uppercase text-xs tracking-wider transition-all">
+                Terminate Session (Logout)
+            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#0D1117] border-t border-[#161B22] flex justify-around items-center px-4 z-50">
+<a class="flex flex-col items-center gap-1 text-slate-500 hover:text-[#00E5FF] transition-all cursor-pointer" href="../main_dashboard/code.html">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-label-tech">DASHBOARD</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 hover:text-[#00E5FF] transition-all cursor-pointer" href="../network_map/code.html">
+<span class="material-symbols-outlined">lan</span>
+<span class="text-[10px] font-label-tech">NETWORK</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 hover:text-[#00E5FF] transition-all cursor-pointer" href="../vulnerabilities/code.html">
+<span class="material-symbols-outlined">security</span>
+<span class="text-[10px] font-label-tech">VULNS</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 hover:text-[#00E5FF] transition-all cursor-pointer" href="../exploitation_results/code.html">
+<span class="material-symbols-outlined">terminal</span>
+<span class="text-[10px] font-label-tech">EXPLOIT</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 hover:text-[#00E5FF] transition-all cursor-pointer" href="../reports/code.html">
+<span class="material-symbols-outlined">description</span>
+<span class="text-[10px] font-label-tech">REPORTS</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-[#00E5FF] transition-all cursor-pointer" href="../settings/code.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="text-[10px] font-label-tech">SETTINGS</span>
+</a>
+</nav>
+
+<!-- Notification Toast -->
+<div id="toast" class="fixed bottom-6 right-6 z-50 bg-[#0D1516] border border-[#00E5FF] text-[#00E5FF] shadow-[0_0_15px_rgba(0,229,255,0.2)] rounded-lg py-3 px-5 flex items-center gap-3 transition-all duration-300 transform translate-y-20 opacity-0 pointer-events-none">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+<span id="toast-message" class="font-mono text-xs font-bold uppercase tracking-wider">Settings saved successfully</span>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Load settings from storage
+        const currentOperator = sessionStorage.getItem('operator') || 'MAHDI';
+        document.getElementById('set-username').value = currentOperator.toLowerCase();
+        
+        const operatorEl = document.getElementById('operator-display-name');
+        if (operatorEl) {
+            operatorEl.textContent = currentOperator;
+        }
+
+        // Safe mode load
+        const storedSafeMode = localStorage.getItem('safemode');
+        if (storedSafeMode !== null) {
+            document.getElementById('set-safemode').checked = (storedSafeMode === 'true');
+        }
+
+        // Subnet scope load
+        const storedSubnet = localStorage.getItem('subnet');
+        if (storedSubnet) {
+            document.getElementById('set-subnet').value = storedSubnet;
+        }
+
+        // Refresh duration load
+        const storedRefresh = localStorage.getItem('refresh_interval');
+        if (storedRefresh) {
+            document.getElementById('set-refresh').value = storedRefresh;
+        }
+
+        // Clearance load
+        const storedClearance = localStorage.getItem('clearance');
+        if (storedClearance) {
+            document.getElementById('set-clearance').value = storedClearance;
+        }
+
+        // Sliders binding
+        const critRange = document.getElementById('range-crit');
+        const critLbl = document.getElementById('lbl-range-crit');
+        const highRange = document.getElementById('range-high');
+        const highLbl = document.getElementById('lbl-range-high');
+
+        // Initial ranges values from storage
+        const storedCrit = localStorage.getItem('alarm_crit') || '75';
+        critRange.value = storedCrit;
+        critLbl.textContent = storedCrit + "%";
+
+        const storedHigh = localStorage.getItem('alarm_high') || '50';
+        highRange.value = storedHigh;
+        highLbl.textContent = storedHigh + "%";
+
+        critRange.addEventListener('input', (e) => {
+            critLbl.textContent = e.target.value + "%";
+        });
+        highRange.addEventListener('input', (e) => {
+            highLbl.textContent = e.target.value + "%";
+        });
+
+        // Save Settings Event
+        document.getElementById('btn-save-settings').addEventListener('click', () => {
+            const rawUser = document.getElementById('set-username').value.trim() || 'mahdi';
+            const upperUser = rawUser.toUpperCase();
+            
+            // Save to Session / LocalStorage
+            sessionStorage.setItem('operator', upperUser);
+            localStorage.setItem('safemode', document.getElementById('set-safemode').checked);
+            localStorage.setItem('subnet', document.getElementById('set-subnet').value.trim());
+            localStorage.setItem('refresh_interval', document.getElementById('set-refresh').value);
+            localStorage.setItem('clearance', document.getElementById('set-clearance').value);
+            localStorage.setItem('alarm_crit', critRange.value);
+            localStorage.setItem('alarm_high', highRange.value);
+
+            // Update visible fields
+            if (operatorEl) {
+                operatorEl.textContent = upperUser;
+            }
+
+            // Show Toast
+            showToast("System configurations committed successfully.");
+        });
+
+        // Logout Event
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            if (confirm("Are you sure you want to terminate the security operator session?")) {
+                sessionStorage.clear();
+                window.location.href = '../login_screen/code.html';
+            }
+        });
+
+        // Toast Helper
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = message;
+            
+            // slide in
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            
+            // slide out after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+    });
+</script>
+</body>
+</html>
